@@ -34,10 +34,15 @@ async def get_comic(conn, *where):
         return dict(row)
 
 
-async def list_comics(conn, limit: int=10, offset: int=0, *where):
-    sql = select([table_comic]).where(*where).order_by(
-        sqlalchemy.desc('posted_at')
-    ).limit(limit).offset(offset)
+async def list_comics(conn, limit: int=10, offset: int=0,
+                      order_by=None, *where):
+    sql = select([table_comic])
+    if where:
+        sql = sql.where(*where)
+    sql = sql.order_by(sqlalchemy.desc('posted_at')
+                       ).limit(limit).offset(offset).order_by(
+                            order_by or table_comic.c.created_at.desc()
+                        )
     result = []
     async for row in conn.execute(sql):
         result.append(dict(row))
