@@ -68,4 +68,5 @@ app.router.add_route('GET', '/api/v1/comics/', list_comics)
 app.router.add_route('GET', '/api/v1/comics/{uuid}', get_comic)
 
 if __name__ == '__main__':
+    app.router.add_static('/', 'frontend')
     web.run_app(app)
