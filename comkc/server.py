@@ -7,8 +7,7 @@ import uuid
 from aiohttp import web
 from aiopg.sa import create_engine
 
-from comkc import config
-from comkc import models
+from comkc import config, models
 
 app = web.Application()
 dsn = config.PG_DSN
@@ -18,9 +17,8 @@ def json_dump_default(obj):
     if isinstance(obj, datetime.datetime):
         return obj.ctime()
     if isinstance(obj, uuid.UUID):
-        return str(obj)
+        return obj.hex
     raise TypeError(obj)
-
 
 json_dumps = functools.partial(json.dumps, default=json_dump_default, indent=2)
 json_response = functools.partial(web.json_response, dumps=json_dumps)
@@ -28,14 +26,10 @@ json_response = functools.partial(web.json_response, dumps=json_dumps)
 
 def validate_uuid(uuid_str):
     try:
-        value = uuid.UUID('4516c3c7-528c-4b40-8778-dcdc1ee22ed0', version=4)
+        value = uuid.UUID(uuid_str, version=4)
     except ValueError:
         return False
     return value.hex == uuid_str
-
-
-async def hello(request):
-        return web.Response(body=b"Hello, world")
 
 
 async def list_comics(request):
