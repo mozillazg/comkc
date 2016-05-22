@@ -30,9 +30,12 @@ async def main(loop):
 
 if __name__ == '__main__':
     if config.DEBUG:
-        logging.basicConfig(level=logging.DEBUG)
+        level = logging.DEBUG
     else:
-        logging.basicConfig(level=logging.INFO)
+        level = logging.INFO
+    format_str = '%(levelname)s %(asctime)s %(module)s %(name)s %(message)s'
+    logging.basicConfig(level=level, format=format_str)
+
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(main(loop))
