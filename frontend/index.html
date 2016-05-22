@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Comkc</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/4-col-portfolio.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+    .portfolio-item {
+      max-height: 263px;
+      min-height: 263px;
+      overflow: hidden;
+    }
+    </style>
+
+  </head>
+
+  <body>
+
+    <!-- Page Content -->
+    <div class="container" id="app">
+
+      <!-- Page Heading -->
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header"><a href="">{{ message }}</a>
+            <small></small>
+          </h1>
+        </div>
+      </div>
+      <!-- /.row -->
+
+      <!-- Pagination -->
+      <div class="row text-center">
+        <div class="col-lg-12">
+          <ul class="pager">
+            <li class="previous">
+              <a href="javascript: void(0);" v-on:click.stop="prePageEvent">Previous</a>
+            </li>
+            <li class="next">
+              <a href="javascript: void(0);" v-on:click.stop="nextPageEvent">Next</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- /.row -->
+
+      <div >
+        <!-- Projects Row -->
+        <div class="row">
+          <div class="col-md-3 portfolio-item" v-for="comic in comics">
+            <a href="{{ comic.source }}">
+              <!-- <img class="img&#45;responsive" src="{{ '/api/v1/comics/' + comic.uuid + '/image' }}" alt="{{ comic.title }}"> -->
+              <img class="img-responsive" src="{{ comic.image }}" alt="{{ comic.title }}"
+                title="{{ comic.title }}">
+            </a>
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+
+      <hr>
+
+      <!-- Pagination -->
+      <div class="row text-center">
+        <div class="col-lg-12">
+          <ul class="pager">
+            <li class="previous">
+              <a href="javascript: void(0);" v-on:click.stop="prePageEvent">Previous</a>
+            </li>
+            <li class="next">
+              <a href="javascript: void(0);" v-on:click.stop="nextPageEvent">Next</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- /.row -->
+
+      <hr>
+
+      <!-- Footer -->
+      <footer>
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- <p>Copyright &#38;copy; Your Website 2016</p> -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="http://cdn.jsdelivr.net/vue/1.0.24/vue.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/vue/1.0.24/vue.min.js"></script>
+    <script src="https://cdn.rawgit.com/vuejs/vue-resource/0.7.0/dist/vue-resource.min.js"></script>
+    <script src="index.js"></script>
+
+  </body>
+
+</html>
