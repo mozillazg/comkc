@@ -15,7 +15,6 @@ with open('HISTORY.rst', encoding='utf-8') as history_file:
     history = history_file.read()
 
 requirements = [
-    'requests',
 ]
 
 setup(
