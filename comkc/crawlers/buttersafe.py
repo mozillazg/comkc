@@ -44,7 +44,7 @@ async def main():
             for item in items[::-1]:
                 url = item['url']
                 if await url_is_exists(url):
-                    logger.info('{} is exists, skip'.format(url))
+                    logger.debug('{} is exists, skip'.format(url))
                     continue
 
                 logger.info('fetching {}'.format(url))
