@@ -16,6 +16,7 @@ table_comic = sqlalchemy.Table(
     sqlalchemy.Column('title', sqlalchemy.String),
     sqlalchemy.Column('source', sqlalchemy.String),
     sqlalchemy.Column('image', sqlalchemy.String),
+    sqlalchemy.Column('cdn', sqlalchemy.String, server_default='""'),
     sqlalchemy.Column('posted_at', sqlalchemy.types.TIMESTAMP),
     sqlalchemy.Column('created_at', sqlalchemy.types.TIMESTAMP),
 )
@@ -34,19 +35,26 @@ async def get_comic(conn, *where):
         return dict(row)
 
 
-async def list_comics(conn, limit: int=10, offset: int=0,
-                      order_by=None, *where):
+async def list_comics(conn, *where, limit: int=10, offset: int=0,
+                      order_by=None):
     sql = select([table_comic])
     if where:
         sql = sql.where(*where)
-    sql = sql.order_by(sqlalchemy.desc('posted_at')
-                       ).limit(limit).offset(offset).order_by(
-                            order_by or table_comic.c.created_at.desc()
-                        )
+    order_by = order_by or table_comic.c.posted_at.desc()
+    sql = sql.limit(limit).offset(offset).order_by(order_by)
     result = []
+
     async for row in conn.execute(sql):
         result.append(dict(row))
     return result
+
+
+async def update_comics(conn, *where, **values):
+    sql = table_comic.update()
+    if where:
+        sql = sql.where(*where)
+    sql = sql.values(**values)
+    return await conn.execute(sql)
 
 
 def create_db(name_or_uri):

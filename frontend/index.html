@@ -69,8 +69,7 @@
         <div class="row">
           <div class="col-md-3 portfolio-item" v-for="comic in comics">
             <a href="{{ comic.source }}">
-              <!-- <img class="img&#45;responsive" src="{{ '/api/v1/comics/' + comic.uuid + '/image' }}" alt="{{ comic.title }}"> -->
-              <img class="img-responsive" src="{{ comic.image }}" alt="{{ comic.title }}"
+              <img class="img-responsive" src="{{ comic.cdn === '' ? comic.image : comic.cdn }}" alt="{{ comic.title }}"
                 title="{{ comic.title }}">
             </a>
           </div>
