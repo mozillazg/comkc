@@ -2,6 +2,7 @@
 import datetime
 import functools
 import json
+import os
 import uuid
 
 from aiohttp import web
@@ -68,5 +69,6 @@ app.router.add_route('GET', '/api/v1/comics/', list_comics)
 app.router.add_route('GET', '/api/v1/comics/{uuid}', get_comic)
 
 if __name__ == '__main__':
-    app.router.add_static('/', 'frontend')
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    app.router.add_static('/', os.path.join(current_dir, '../frontend/'))
     web.run_app(app)
