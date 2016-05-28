@@ -27,7 +27,7 @@ class Worker(BaseWorker):
             date = datetime.datetime.strptime(date_str, '%Y/%m/%d')
             title = ele.text().strip()
             data.append({
-                'source': url,
+                'url': url,
                 'title': '{0}: {1}'.format(self.SITE, title),
                 'date': date,
             })
