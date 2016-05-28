@@ -19,7 +19,7 @@ dsn = config.PG_DSN
 class WorkerMeta(type):
     def __init__(cls, name, bases, namespace):
         site = cls.SITE
-        if site and site not in crawlers:
+        if cls.ENABLE and site and site not in crawlers:
             crawlers[site] = cls
 
 
@@ -27,6 +27,7 @@ class BaseWorker(metaclass=WorkerMeta):
     SITE = None
     BASE_URL = None
     SLEEP = config.WORKER_SLEEP
+    ENABLE = True
 
     @abc.abstractmethod
     async def get_items(self) -> list:
