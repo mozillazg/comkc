@@ -59,7 +59,7 @@ async def upload_images():
 async def main(loop):
     while True:
         await upload_images()
-        await asyncio.sleep(60 * 60 * 8)
+        await asyncio.sleep(config.WORKER_SLEEP / 3)
 
 
 if __name__ == '__main__':

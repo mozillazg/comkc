@@ -41,9 +41,11 @@ async def list_comics(request):
             per_page = request.GET.get('per_page', '10')
             page = request.GET.get('page', '1')
             if per_page.isdigit() and int(per_page) > 0:
-                limit = int(per_page)
+                if int(per_page) < config.MAX_LIMIT:
+                    limit = int(per_page)
             if page.isdigit() and int(page) > 0:
-                offset = (int(page) - 1) * limit
+                if int(page) < config.MAX_OFFSET:
+                    offset = (int(page) - 1) * limit
                 if offset > 0:
                     offset += 1
 
