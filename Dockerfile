@@ -6,4 +6,4 @@ RUN pip install -r requirements.txt
 
 WORKDIR /opt/comkc/
 COPY ./ /opt/comkc/
-RUN pip install .
+RUN python setup.py develop
