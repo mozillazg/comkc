@@ -29,8 +29,9 @@ class Worker(BaseWorker):
     async def parse_item(self, url):
         html = await self.fetch_url(url)
         image = pq(html)('.main a.comic img:first').attr('src')
-        date_str = pq(html)('.comment-style-admin')('.date').text()
-        date = datetime.datetime.strptime(date_str, '%d %b \'%y')
+        date_str = pq(html)('.comment-style-admin')('.date').text().strip()
+        date_str = date_str.replace("'", '')
+        date = datetime.datetime.strptime(date_str, '%d %b %y')
         return {'image': image, 'date': date}
 
 if __name__ == '__main__':

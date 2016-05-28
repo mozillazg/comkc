@@ -23,7 +23,7 @@ class Worker(BaseWorker):
                 item('.archive-date').text().strip(), year
             )
             date = datetime.datetime.strptime(date_str, '%b %d %Y')
-            title = item('a').text()
+            title = item('a').text().strip()
             url = item('a').attr('href')
             data.append({
                 'title': '{0}: {1}'.format(self.SITE, title),
