@@ -30,8 +30,11 @@ class Worker(BaseWorker):
         html = await self.fetch_url(url)
         image = pq(html)('.main a.comic img:first').attr('src')
         date_str = pq(html)('.comment-style-admin')('.date').text().strip()
-        date_str = date_str.replace("'", '')
-        date = datetime.datetime.strptime(date_str, '%d %b %y')
+        if not date_str:
+            date_str = pq(html)('.list-style-comments')('.date').text().strip()
+        date_lst = date_str.replace("'", '').split()
+        date_str = '{0} {1} 20{2}'.format(*date_lst)
+        date = datetime.datetime.strptime(date_str, '%d %b %Y')
         return {'image': image, 'date': date}
 
 if __name__ == '__main__':

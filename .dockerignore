@@ -1,5 +1,7 @@
-.git
+.git/
 node_modules/
 venv/
 *.egg-info/
-__pycache__/
+**/__pycache__/
+*.sql
+data/
