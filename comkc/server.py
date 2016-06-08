@@ -49,7 +49,14 @@ async def list_comics(request):
                 if offset > 0:
                     offset += 1
 
-            comics = await models.list_comics(conn, limit=limit, offset=offset)
+            random = request.GET.get('random')
+            if random is not None:
+                order_by = 'random()'
+            else:
+                order_by = models.table_comic.c.posted_at.desc()
+            comics = await models.list_comics(
+                conn, limit=limit, offset=offset, order_by=order_by
+            )
             return json_response(comics)
 
 

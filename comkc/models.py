@@ -40,8 +40,11 @@ async def list_comics(conn, *where, limit: int=10, offset: int=0,
     sql = select([table_comic])
     if where:
         sql = sql.where(*where)
-    order_by = order_by or table_comic.c.posted_at.desc()
-    sql = sql.limit(limit).offset(offset).order_by(order_by)
+    if order_by is None:
+        order_by = table_comic.c.posted_at.desc()
+    if offset > 0:
+        sql = sql.offset(offset)
+    sql = sql.order_by(order_by).limit(limit)
     result = []
 
     async for row in conn.execute(sql):

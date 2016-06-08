@@ -12,7 +12,10 @@ var vue = new Vue({
   },
   methods: {
     'fetch': function() {
-      var url = '/api/v1/comics/?per_page=12&page=' + this.page;
+      var url = '/api/v1/comics/?per_page=8&page=' + this.page;
+      if (/[\?&]random$/.test(location.href)) {
+        url += '&random'
+      }
       this.$http.get(url).then(function (response) {
         // set data on vm
       this.$set('comics', response.data);
