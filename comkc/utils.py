@@ -14,7 +14,7 @@ CLIENT_HEADERS = {
 
 async def fetch_url(url, binary=False):
     with aiohttp.ClientSession(headers=CLIENT_HEADERS) as session:
-        logger.debug('start fetch %s', url)
+        logger.info('start fetch %s', url)
         async with session.get(url) as resp:
             if binary:
                 return await resp.read()

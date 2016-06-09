@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 class Worker(BaseWorker):
     SITE = 'Explosm'
     BASE_URL = 'http://explosm.net/comics/archive'
+    ENABLE = False
 
     async def _get_one_month(self, url):
         html = await self.fetch_url(url)
