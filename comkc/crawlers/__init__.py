@@ -43,15 +43,18 @@ class BaseWorker(metaclass=WorkerMeta):
                 logger.info('start fetch {}'.format(self.BASE_URL))
                 items = await self.get_items()
                 for item in items[::-1]:
-                    url = item['url']
-                    if await self.url_is_exists(url):
-                        logger.debug('{} is exists, skip'.format(url))
-                        continue
+                    try:
+                        url = item['url']
+                        if await self.url_is_exists(url):
+                            logger.debug('{} is exists, skip'.format(url))
+                            continue
 
-                    logger.info('fetching {}'.format(url))
-                    item.update(await self.parse_item(url))
-                    await self.save_item(self.SITE, url, item)
-                    await asyncio.sleep(60 * 1)
+                        logger.info('fetching {}'.format(url))
+                        item.update(await self.parse_item(url))
+                        await self.save_item(self.SITE, url, item)
+                        await asyncio.sleep(60 * 1)
+                    except Exception as e:
+                        logger.exception(e)
             except Exception as e:
                 logger.exception(e)
                 await asyncio.sleep(60 * 2)
