@@ -12,10 +12,12 @@ CLIENT_HEADERS = {
 }
 
 
-async def fetch_url(url, binary=False):
+async def fetch_url(url, binary=False, return_resp=False, method='GET'):
     with aiohttp.ClientSession(headers=CLIENT_HEADERS) as session:
         logger.info('start fetch %s', url)
-        async with session.get(url) as resp:
+        async with getattr(session, method.lower())(url) as resp:
+            if return_resp:
+                return resp
             if binary:
                 return await resp.read()
             else:

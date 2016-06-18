@@ -63,8 +63,8 @@ class BaseWorker(metaclass=WorkerMeta):
         return await self.run()
 
     @staticmethod
-    async def fetch_url(url, binary=False):
-        return await _fetch_url(url, binary=binary)
+    async def fetch_url(url, binary=False, **kwargs):
+        return await _fetch_url(url, binary=binary, **kwargs)
 
     @staticmethod
     async def url_is_exists(url):
