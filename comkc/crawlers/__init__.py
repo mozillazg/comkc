@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+import abc
+import asyncio
 import datetime
-import functools
 import logging
 
 from aiopg.sa import create_engine
@@ -8,63 +9,105 @@ import xmltodict
 
 from comkc import config
 from comkc.models import table_comic, insert_comic, get_comic
-from comkc.utils import fetch_url  # noqa
+from comkc.utils import fetch_url as _fetch_url
 
 crawlers = {}
 logger = logging.getLogger(__name__)
 dsn = config.PG_DSN
 
 
-async def url_is_exists(url):
-    async with create_engine(dsn) as engine:
-        async with engine.acquire() as conn:
-            comic = await get_comic(
-                        conn, table_comic.c.source == url
-                    )
-            if comic is not None:
-                return True
+class WorkerMeta(type):
+    def __init__(cls, name, bases, namespace):
+        site = cls.SITE
+        if cls.ENABLE and site and site not in crawlers:
+            crawlers[site] = cls
 
 
-async def save_data(data):
-    async with create_engine(dsn) as engine:
-        async with engine.acquire() as conn:
-            return await insert_comic(conn, data)
+class BaseWorker(metaclass=WorkerMeta):
+    SITE = None
+    BASE_URL = None
+    SLEEP = config.WORKER_SLEEP
+    ENABLE = True
 
+    @abc.abstractmethod
+    async def get_items(self) -> list:
+        pass
 
-async def parse_rss_items(html):
-    rss_items = xmltodict.parse(html)['rss']['channel']['item']
-    data = []
+    @abc.abstractmethod
+    async def parse_item(self, url) -> dict:
+        pass
 
-    for item in rss_items:
-        date_str = item['pubDate']
-        date = datetime.datetime.strptime(date_str, '%a, %d %b %Y %H:%M:%S %z')
-        item.update({
-            'pubDate': date,
-        })
-        data.append(item)
-    return data
+    async def run(self):
+        while True:
+            try:
+                logger.info('start fetch {}'.format(self.BASE_URL))
+                items = await self.get_items()
+                for item in items[::-1]:
+                    url = item['url']
+                    if await self.url_is_exists(url):
+                        logger.debug('{} is exists, skip'.format(url))
+                        continue
 
+                    logger.info('fetching {}'.format(url))
+                    item.update(await self.parse_item(url))
+                    await self.save_item(self.SITE, url, item)
+                    await asyncio.sleep(60 * 1)
+            except Exception as e:
+                logger.exception(e)
+                await asyncio.sleep(60 * 2)
+            else:
+                await asyncio.sleep(self.SLEEP)
+                logger.info('sleep...')
 
-async def save_item(site, url, item):
-    db_data = {
-        'site': site,
-        'title': item['title'],
-        'source': url,
-        'image': item['image'],
-        'posted_at': item['date'],
-    }
-    logger.debug('got item:\n{}'.format(dict(db_data)))
-    if not item['image']:
-        return
-    await save_data(db_data)
-    logger.info('saved {}'.format(url))
+    async def __call__(self):
+        return await self.run()
 
+    @staticmethod
+    async def fetch_url(url, binary=False, **kwargs):
+        return await _fetch_url(url, binary=binary, **kwargs)
 
-def register(func):
-    name = func.__module__
-    crawlers[name] = func
+    @staticmethod
+    async def url_is_exists(url):
+        async with create_engine(dsn) as engine:
+            async with engine.acquire() as conn:
+                comic = await get_comic(
+                            conn, table_comic.c.source == url
+                        )
+                if comic is not None:
+                    return True
 
-    @functools.wraps(func)
-    def _wrapper(conn, handler):
-        return func(conn, handler)
-    return _wrapper
+    @staticmethod
+    async def save_data(data):
+        async with create_engine(dsn) as engine:
+            async with engine.acquire() as conn:
+                return await insert_comic(conn, data)
+
+    @staticmethod
+    async def parse_rss_items(html):
+        rss_items = xmltodict.parse(html)['rss']['channel']['item']
+        data = []
+
+        for item in rss_items:
+            date_str = item['pubDate']
+            date = datetime.datetime.strptime(date_str,
+                                              '%a, %d %b %Y %H:%M:%S %z')
+            item.update({
+                'pubDate': date,
+            })
+            data.append(item)
+        return data
+
+    @staticmethod
+    async def save_item(site, url, item):
+        db_data = {
+            'site': site,
+            'title': item['title'],
+            'source': url,
+            'image': item['image'],
+            'posted_at': item['date'],
+        }
+        logger.debug('got item:\n{}'.format(dict(db_data)))
+        if not item['image']:
+            return
+        await BaseWorker.save_data(db_data)
+        logger.info('saved {}'.format(url))

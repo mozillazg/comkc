@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import logging
 
 from pyquery import PyQuery as pq
@@ -10,25 +11,31 @@ logger = logging.getLogger(__name__)
 
 class Worker(BaseWorker):
     SITE = 'Extra Ordinary'
-    BASE_URL = 'http://www.exocomics.com/feed'
+    BASE_URL = 'http://www.exocomics.com/archive'
+    ENABLE = False
 
     async def get_items(self):
         html = await self.fetch_url(self.BASE_URL)
-        data = await self.parse_rss_items(html)
-
-        for item in data:
-            title = item['title']
-            item.update({
+        data = []
+        for item in pq(html)('.archive')('a'):
+            url = pq(item).attr('href')
+            title = url.strip('/').split('/')[-1]
+            data.append({
                 'title': '{0} #{1}'.format(self.SITE, title),
-                'url': item['link'],
-                'date': item['pubDate'],
+                'url': url,
             })
         return data
 
     async def parse_item(self, url):
         html = await self.fetch_url(url)
         image = pq(html)('.main a.comic img:first').attr('src')
-        return {'image': image}
+        date_str = pq(html)('.comment-style-admin')('.date').text().strip()
+        if not date_str:
+            date_str = pq(html)('.list-style-comments')('.date').text().strip()
+        date_lst = date_str.replace("'", '').split()
+        date_str = '{0} {1} 20{2}'.format(*date_lst)
+        date = datetime.datetime.strptime(date_str, '%d %b %Y')
+        return {'image': image, 'date': date}
 
 if __name__ == '__main__':
     import asyncio

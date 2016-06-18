@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 
 
 class Worker(BaseWorker):
-    SITE = 'Victims of Circumsolar'
-    BASE_URL = 'http://feeds.feedburner.com/victimsofcircumsolar?format=xml'
+    SITE = 'Don\'t Hit Save'
+    BASE_URL = 'http://donthitsave.com/donthitsavefeed.xml'
 
     async def get_items(self):
         html = await self.fetch_url(self.BASE_URL)
@@ -20,14 +20,14 @@ class Worker(BaseWorker):
             title = item['title']
             item.update({
                 'title': '{0}: {1}'.format(self.SITE, title),
-                'url': item['feedburner:origLink'],
+                'url': item['link'],
                 'date': item['pubDate'],
             })
         return data
 
     async def parse_item(self, url):
         html = await self.fetch_url(url)
-        image = pq(html)('#comic img').attr('src')
+        image = pq(html)('head meta[property="og:image"]').attr('content')
         return {'image': image}
 
 if __name__ == '__main__':

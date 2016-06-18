@@ -1,7 +1,6 @@
 # -*- coding: utf-8
 import asyncio
 import logging
-import uuid
 
 from aiopg.sa import create_engine
 import qiniu
@@ -13,13 +12,12 @@ dsn = config.PG_DSN
 logger = logging.getLogger(__name__)
 
 
-def upload(data, filename=None, params=None,
+def upload(data, comic, params=None,
            mime_type='application/octet-stream',
            check_crc=False, *args, **kwargs):
     qn = qiniu.Auth(config.QINIU['access_key'], config.QINIU['secret_key'])
     token = qn.upload_token(config.QINIU['bucket_name'])
-    if not filename:
-        filename = 'comkc/{}'.format(uuid.uuid4().hex)
+    filename = 'comkc/{}'.format(str(comic['uuid'].hex))
     ret, _ = qiniu.put_data(
         token, filename, data, params=params,
         mime_type=mime_type, check_crc=check_crc, *args, **kwargs
@@ -40,28 +38,28 @@ async def upload_images():
                     image_data = await fetch_url(image_url, binary=True)
                     assert image_data
                 except Exception as e:
-                    logger.exception(e)
-                    logger.warn('download %s failed!', image_url)
+                    logger.exception('download %s failed! \n%s', image_url, e)
                     continue
                 try:
                     # 这里会阻塞 IO, 所以这个程序其实并不是一个异步的程序
-                    url = upload(image_data)
-                except:
-                    logger.warn('upload %s failed!', image_url)
+                    cdn_url = upload(image_data, comic)
+                except Exception as e:
+                    logger.exception('upload %s failed! \n%s', image_url, e)
                     continue
 
                 uuid = str(comic['uuid'])
                 await models.update_comics(
-                    conn, (models.table_comic.c.uuid == uuid), cdn=url
+                    conn, (models.table_comic.c.uuid == uuid), cdn=cdn_url
                 )
-                logger.info('download then upload %s success!', image_url)
+                logger.info('download %s then upload to %s success!',
+                            image_url, cdn_url)
                 await asyncio.sleep(60 * 1)
 
 
 async def main(loop):
     while True:
         await upload_images()
-        await asyncio.sleep(60 * 60 * 8)
+        await asyncio.sleep(config.WORKER_SLEEP / 3)
 
 
 if __name__ == '__main__':

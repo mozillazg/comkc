@@ -1,0 +1,8 @@
+webapp:
+  build: .
+  environment:
+    COMKC_PG_DSN: dbname=comkc user=comkc_user password=passwd host=postgres
+    COMKC_QINIU_ACCESS_KEY: key
+    COMKC_QINIU_SECRET_KEY: key
+    COMKC_QINIU_BUCKET_NAME: name
+    COMKC_QINIU_URL_FORMAT: url

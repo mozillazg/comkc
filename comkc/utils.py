@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import aiohttp
+import logging
 
+logger = logging.getLogger(__name__)
 CLIENT_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:45.0) Gecko/20100101 Firefox/45.0',  # noqa
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',  # noqa
@@ -10,9 +12,12 @@ CLIENT_HEADERS = {
 }
 
 
-async def fetch_url(url, binary=False):
+async def fetch_url(url, binary=False, return_resp=False, method='GET'):
     with aiohttp.ClientSession(headers=CLIENT_HEADERS) as session:
-        async with session.get(url) as resp:
+        logger.info('start fetch %s', url)
+        async with getattr(session, method.lower())(url) as resp:
+            if return_resp:
+                return resp
             if binary:
                 return await resp.read()
             else:

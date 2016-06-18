@@ -1,32 +1,30 @@
-server:
-  build: .
+web:
   command: gunicorn comkc.server:app --bind 0.0.0.0:8080 --worker-class aiohttp.worker.GunicornWebWorker
+  extends:
+    file: docker-compose.common.yml
+    service: webapp
   links:
     - postgres
-  environment:
-    COMKC_PG_DSN: dbname=comkc user=comkc_user password=passwd host=postgres
+  ports:
+    - "8080"
 
 worker:
-  build: .
   command: python -m comkc.worker
+  extends:
+    file: docker-compose.common.yml
+    service: webapp
   links:
     - postgres
-  environment:
-    COMKC_PG_DSN: dbname=comkc user=comkc_user password=passwd host=postgres
 
 uploader:
-  build: .
   command: python -m comkc.uploader
+  extends:
+    file: docker-compose.common.yml
+    service: webapp
   links:
     - postgres
-  environment:
-    COMKC_PG_DSN: dbname=comkc user=comkc_user password=passwd host=postgres
-    COMKC_QINIU_ACCESS_KEY: key
-    COMKC_QINIU_SECRET_KEY: key
-    COMKC_QINIU_BUCKET_NAME: name
-    COMKC_QINIU_URL_FORMAT: url
 
 postgres:
   image: postgres:latest
-  ports:
-    - 5432
+  expose:
+    - "5432"
