@@ -50,7 +50,10 @@ class BaseWorker(metaclass=WorkerMeta):
                             continue
 
                         logger.info('fetching {}'.format(url))
-                        item.update(await self.parse_item(url))
+                        extra_data = await self.parse_item(url)
+                        if extra_data is None:
+                            continue
+                        item.update(extra_data)
                         await self.save_item(self.SITE, url, item)
                         await asyncio.sleep(60 * 1)
                     except Exception as e:
