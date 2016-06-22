@@ -58,6 +58,7 @@ class BaseWorker(metaclass=WorkerMeta):
                         await asyncio.sleep(60 * 1)
                     except Exception as e:
                         logger.exception(e)
+                        await asyncio.sleep(60 * 2)
             except Exception as e:
                 logger.exception(e)
                 await asyncio.sleep(60 * 2)
