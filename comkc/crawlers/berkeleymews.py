@@ -9,17 +9,18 @@ logger = logging.getLogger(__name__)
 
 
 class Worker(BaseWorker):
-    SITE = 'Explosm'
-    BASE_URL = 'http://feeds.feedburner.com/Explosm?format=xml'
+    SITE = 'Berkeley Mews'
+    BASE_URL = 'http://www.berkeleymews.com/?feed=rss2'
+    ENABLE = False
 
     async def get_items(self):
         html = await self.fetch_url(self.BASE_URL)
         data = await self.parse_rss_items(html)
 
         for item in data:
-            sn = item['link'].strip('/').split('/')[-1]
+            title = item['title']
             item.update({
-                'title': 'Cyanide & Happiness #{}'.format(sn),
+                'title': '{0}: {1}'.format(self.SITE, title),
                 'url': item['link'],
                 'date': item['pubDate'],
             })
@@ -27,11 +28,7 @@ class Worker(BaseWorker):
 
     async def parse_item(self, url):
         html = await self.fetch_url(url)
-        image = pq(html)('#main-comic').attr('src')
-        if not image:
-            return None
-        if not image.startswith('http'):
-            image = 'http:' + image
+        image = pq(html)('#comic img').attr('src')
         return {'image': image}
 
 if __name__ == '__main__':

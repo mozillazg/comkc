@@ -54,6 +54,8 @@ class Worker(BaseWorker):
     async def parse_item(self, url):
         html = await self.fetch_url(url)
         image = pq(html)('#main-comic').attr('src')
+        if not image:
+            return None
         if not image.startswith('http'):
             image = 'http:' + image
         return {'image': image}
