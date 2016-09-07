@@ -4,4 +4,4 @@ cchardet==1.0.0
 pyquery==1.2.13
 qiniu==7.0.7
 SQLAlchemy==1.0.13
-xmltodict==0.10.1
+xmltodict==0.10.2
