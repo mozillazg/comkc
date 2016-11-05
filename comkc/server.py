@@ -12,6 +12,7 @@ from comkc import config, models
 
 app = web.Application()
 dsn = config.PG_DSN
+current_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 def json_dump_default(obj):
@@ -38,7 +39,7 @@ async def list_comics(request):
         async with engine.acquire() as conn:
             limit = 10
             offset = 0
-            per_page = request.GET.get('per_page', '10')
+            per_page = request.GET.get('per_page', '8')
             page = request.GET.get('page', '1')
             if per_page.isdigit() and int(per_page) > 0:
                 if int(per_page) < config.MAX_LIMIT:
@@ -50,7 +51,7 @@ async def list_comics(request):
                     offset += 1
 
             random = request.GET.get('random')
-            if random is not None:
+            if random:
                 order_by = 'random()'
             else:
                 order_by = models.table_comic.c.posted_at.desc()
@@ -78,6 +79,6 @@ app.router.add_route('GET', '/api/v1/comics/', list_comics)
 app.router.add_route('GET', '/api/v1/comics/{uuid}', get_comic)
 
 if __name__ == '__main__':
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    app.router.add_static('/', os.path.join(current_dir, '../frontend/'))
+    app.router.add_static('/', os.path.join(current_dir, '../frontend/dist/'),
+                          show_index=True)
     web.run_app(app)

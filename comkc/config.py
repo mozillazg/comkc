@@ -20,5 +20,13 @@ if DEBUG:
     level = logging.DEBUG
 else:
     level = logging.INFO
+
+SENTRY_DSN = os.environ.get('COMKC_SENTRY_DSN')
+if SENTRY_DSN:
+    from raven.conf import setup_logging
+    from raven.handlers.logging import SentryHandler
+    handler = SentryHandler(SENTRY_DSN)
+    setup_logging(handler)
+
 format_str = '%(levelname)s %(asctime)s %(module)s %(name)s %(message)s'
 logging.basicConfig(level=level, format=format_str)
