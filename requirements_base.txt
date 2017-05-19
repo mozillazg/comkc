@@ -3,6 +3,6 @@ aiopg==0.9.2
 cchardet==1.0.0
 pyquery==1.2.13
 qiniu==7.0.7
-raven==5.31.0
+raven==6.0.0
 SQLAlchemy==1.0.13
 xmltodict==0.10.1
