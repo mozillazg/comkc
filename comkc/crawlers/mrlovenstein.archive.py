@@ -50,7 +50,11 @@ class Worker(BaseWorker):
             title = title_pq.text().strip(' .')
             url = title_pq.attr('href')
             date = self.re_date.findall(pq(item)('.comic_date').text())
-            month, day, year = self.re_date_split.split(date[0])
+            try:
+                month, day, year = self.re_date_split.split(date[0])
+            except ValueError as e:
+                logger.exception(e)
+                continue
             date = '{0} {1:0>2} {2}'.format(month, day, year)
 
             yield {
