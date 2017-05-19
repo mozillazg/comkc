@@ -1,5 +1,5 @@
 aiohttp==1.1.1
-aiopg==0.9.2
+aiopg==0.13.0
 cchardet==1.0.0
 pyquery==1.2.13
 qiniu==7.0.7
