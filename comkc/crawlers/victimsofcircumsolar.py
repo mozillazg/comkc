@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class Worker(BaseWorker):
     SITE = 'Victims of Circumsolar'
     BASE_URL = 'http://feeds.feedburner.com/victimsofcircumsolar?format=xml'
+    ENABLE = False
 
     async def get_items(self):
         html = await self.fetch_url(self.BASE_URL)
@@ -29,6 +30,7 @@ class Worker(BaseWorker):
         html = await self.fetch_url(url)
         image = pq(html)('#comic img').attr('src')
         return {'image': image}
+
 
 if __name__ == '__main__':
     import asyncio
