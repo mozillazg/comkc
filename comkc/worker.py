@@ -12,9 +12,10 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 for path in glob.glob(
     os.path.join(current_dir, 'crawlers') + os.path.sep + '*.py'
 ):
-    if '__init__' in path:
+    filename = os.path.basename(path)
+    if filename.startswith('_'):
         continue
-    module = 'comkc.crawlers.{}'.format(os.path.basename(path).split('.')[0])
+    module = 'comkc.crawlers.{}'.format(filename.split('.')[0])
     if module.endswith('.archive'):
         continue
     __import__(module)

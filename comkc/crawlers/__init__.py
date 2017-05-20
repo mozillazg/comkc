@@ -29,6 +29,9 @@ class BaseWorker(metaclass=WorkerMeta):
     SLEEP = config.WORKER_SLEEP
     ENABLE = True
 
+    def __init__(self):
+        self.config = config
+
     @abc.abstractmethod
     async def get_items(self) -> list:
         pass

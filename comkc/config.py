@@ -30,3 +30,15 @@ if SENTRY_DSN:
 
 format_str = '%(levelname)s %(asctime)s %(module)s %(name)s %(message)s'
 logging.basicConfig(level=level, format=format_str)
+
+
+TWITTER = {
+    'consumer_key': os.environ.get('COMKC_TWITTER_CONSUMER_KEY'),
+    'consumer_secret': os.environ.get('COMKC_TWITTER_CONSUMER_SECRET'),
+    'access_token': os.environ.get('COMKC_TWITTER_ACCESS_TOKEN'),
+    'access_token_secret': os.environ.get('COMKC_TWITTER_ACCESS_TOKEN_SECRET'),
+}
+peony_client = None
+if TWITTER['consumer_key']:
+    from peony import PeonyClient
+    peony_client = PeonyClient(**TWITTER)
