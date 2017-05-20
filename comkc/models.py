@@ -10,8 +10,10 @@ metadata = sqlalchemy.MetaData()
 
 table_comic = sqlalchemy.Table(
     'comics', metadata,
-    sqlalchemy.Column('uuid', sqlalchemy.dialects.postgresql.UUID,
-                      server_default=sqlalchemy.text('gen_random_uuid()')),
+    sqlalchemy.Column(
+        'uuid', sqlalchemy.dialects.postgresql.UUID(as_uuid=True),
+        server_default=sqlalchemy.text('gen_random_uuid()')
+    ),
     sqlalchemy.Column('site', sqlalchemy.String),
     sqlalchemy.Column('title', sqlalchemy.String),
     sqlalchemy.Column('source', sqlalchemy.String),
