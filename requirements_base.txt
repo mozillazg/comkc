@@ -1,4 +1,4 @@
-aiohttp==2.0.7
+aiohttp==2.1.0
 aiopg==0.13.0
 cchardet==2.1.0
 pyquery==1.2.17
