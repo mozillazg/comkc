@@ -1,5 +1,5 @@
 webapp:
-  build: .
+  image: mozillazg/comkc:latest
   environment:
     COMKC_PG_DSN: dbname=comkc user=comkc_user password=passwd host=postgres
     COMKC_QINIU_ACCESS_KEY: key
