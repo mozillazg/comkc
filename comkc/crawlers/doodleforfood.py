@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import asyncio
 import logging
 import re
 
@@ -36,7 +37,6 @@ class Worker(BaseWorker):
 
 
 if __name__ == '__main__':
-    import asyncio
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(Worker().run())
