@@ -57,6 +57,7 @@ export default {
     return {
       comics: [],
       random: '',
+      site: '',
       page: 1
     }
   },
@@ -69,7 +70,8 @@ export default {
   methods: {
     getQueryParams: function () {
       var random = this.random
-      var params = {'page': this.page}
+      var site = this.site
+      var params = {'page': this.page, 'site': site}
       if (random) {
         params.random = random
       }
@@ -80,6 +82,7 @@ export default {
     },
     fetch: function () {
       this.random = this.$route.query.random
+      this.site = this.$route.query.site
       this.page = this.currentPage()
       var url = '/api/v1/comics/?' + jQuery.param(this.getQueryParams())
       this.$http.get(url).then(function (response) {

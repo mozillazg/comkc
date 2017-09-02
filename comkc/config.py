@@ -14,7 +14,7 @@ QINIU = {
 
 WORKER_SLEEP = 60 * 60 * 8
 MAX_LIMIT = 20
-MAX_OFFSET = 10
+MAX_OFFSET = 500
 
 if DEBUG:
     level = logging.DEBUG

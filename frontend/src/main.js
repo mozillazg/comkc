@@ -4,12 +4,14 @@ import Resource from 'vue-resource'
 
 import App from './App'
 import Comics from './components/Comics.vue'
+import Sites from './components/Sites.vue'
 
 Vue.use(Router)
 Vue.use(Resource)
 
 const routes = [
-  {path: '/', name: 'comics', component: Comics, alias: '/comics'},
+  {path: '/', name: 'comics', component: Comics, alias: '/comics/'},
+  {path: '/sites/', name: 'sites', component: Sites, alias: '/sites/'},
   {path: '*', redirect: '/'}
 ]
 

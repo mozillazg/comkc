@@ -37,6 +37,16 @@ async def get_comic(conn, *where):
         return dict(row)
 
 
+async def list_sites(conn):
+    sql = select([table_comic]).distinct(table_comic.c.site)
+    sql = sql.with_only_columns([table_comic.c.site])
+    result = []
+
+    async for row in conn.execute(sql):
+        result.append(dict(row))
+    return result
+
+
 async def list_comics(conn, *where, limit: int=10, offset: int=0,
                       order_by=None):
     sql = select([table_comic])
