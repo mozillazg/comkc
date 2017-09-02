@@ -95,6 +95,9 @@ export default {
       if (this.random) {
         query.random = this.random
       }
+      if (this.site) {
+        query.site = this.site
+      }
 
       if (action === 'nextPage') {
         query.page = this.nextPage()
