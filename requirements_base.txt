@@ -4,7 +4,7 @@ attrs==17.2.0
 cchardet==2.1.1
 peony-twitter==1.0.3
 pyquery==1.2.17
-qiniu==7.1.5
+qiniu==7.1.6
 raven==6.1.0
 SQLAlchemy==1.1.13
 xmltodict==0.11.0
