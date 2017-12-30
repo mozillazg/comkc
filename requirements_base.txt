@@ -1,6 +1,6 @@
 aiohttp==2.2.5
 aiopg==0.13.0
-attrs==17.2.0
+attrs==17.4.0
 cchardet==2.1.1
 peony-twitter==1.0.3
 pyquery==1.2.17
