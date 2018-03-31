@@ -12,7 +12,7 @@ QINIU = {
     'url_format': os.getenv('COMKC_QINIU_URL_FORMAT'),
 }
 
-WORKER_SLEEP = 60 * 60 * 8
+WORKER_SLEEP = int(os.getenv('COMKC_WORKER_SLEEP', 60 * 60 * 8))
 MAX_LIMIT = 20
 MAX_OFFSET = 500
 
