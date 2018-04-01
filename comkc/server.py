@@ -93,6 +93,7 @@ app.router.add_route('GET', '/api/v1/comics/sites/', list_sites)
 app.router.add_route('GET', '/api/v1/comics/{uuid}', get_comic)
 
 if __name__ == '__main__':
-    app.router.add_static('/', os.path.join(current_dir, '../frontend/dist/'),
-                          show_index=True)
+    app.router.add_static(
+            '/', os.path.join(current_dir, '../new_frontend/build/'),
+            show_index=True)
     web.run_app(app, host='0.0.0.0', port=8080)
