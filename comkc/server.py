@@ -40,8 +40,8 @@ async def list_comics(request):
         async with engine.acquire() as conn:
             limit = 10
             offset = 0
-            per_page = request.GET.get('per_page', '8')
-            page = request.GET.get('page', '1')
+            per_page = request.query.get('per_page', '8')
+            page = request.query.get('page', '1')
             if per_page.isdigit() and int(per_page) > 0:
                 if int(per_page) < config.MAX_LIMIT:
                     limit = int(per_page)
@@ -53,10 +53,10 @@ async def list_comics(request):
 
             where = [
             ]
-            site = request.GET.get('site')
+            site = request.query.get('site')
             if site:
                 where.append(models.table_comic.c.site == site)
-            random = request.GET.get('random')
+            random = request.query.get('random')
             if random:
                 order_by = 'random()'
             else:

@@ -13,7 +13,7 @@ CLIENT_HEADERS = {
 
 
 async def fetch_url(url, binary=False, return_resp=False, method='GET'):
-    with aiohttp.ClientSession(headers=CLIENT_HEADERS) as session:
+    async with aiohttp.ClientSession(headers=CLIENT_HEADERS) as session:
         logger.info('start fetch %s', url)
         async with getattr(session, method.lower())(url) as resp:
             if return_resp:
