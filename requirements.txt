@@ -1,2 +1,2 @@
 -r requirements_base.txt
-gunicorn==19.8.0
+gunicorn==19.8.1
