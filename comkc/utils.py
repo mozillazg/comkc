@@ -16,6 +16,7 @@ async def fetch_url(url, binary=False, return_resp=False, method='GET'):
     async with aiohttp.ClientSession(headers=CLIENT_HEADERS) as session:
         logger.info('start fetch %s', url)
         async with getattr(session, method.lower())(url) as resp:
+            resp.raise_for_status()
             if return_resp:
                 return resp
             if binary:
