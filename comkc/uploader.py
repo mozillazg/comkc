@@ -1,9 +1,10 @@
 # -*- coding: utf-8
 import asyncio
 import logging
+import io
 
 from aiopg.sa import create_engine
-import qiniu
+import aiohttp
 
 from comkc import config, models
 from comkc.utils import fetch_url
@@ -12,17 +13,20 @@ dsn = config.PG_DSN
 logger = logging.getLogger(__name__)
 
 
-def upload(data, comic, params=None,
-           mime_type='application/octet-stream',
-           check_crc=False, *args, **kwargs):
-    qn = qiniu.Auth(config.QINIU['access_key'], config.QINIU['secret_key'])
-    token = qn.upload_token(config.QINIU['bucket_name'])
-    filename = 'comkc/{}'.format(str(comic['uuid'].hex))
-    ret, _ = qiniu.put_data(
-        token, filename, data, params=params,
-        mime_type=mime_type, check_crc=check_crc, *args, **kwargs
-    )
-    return config.QINIU['url_format'].format(filename=ret['key'])
+async def upload(data, comic):
+    async with aiohttp.ClientSession() as session:
+        data = {
+            'file': io.BytesIO(data),
+        }
+        headers = {
+            'Token': config.STORAGE_API_TOKEN,
+        }
+        async with session.post(
+                config.STORAGE_API_URL,
+                data=data, headers=headers) as resp:
+            ret = await resp.json()
+
+    return config.STORAGE_URL_FORMAT.format(filename=ret['key'])
 
 
 async def upload_images():
@@ -41,8 +45,7 @@ async def upload_images():
                     logger.exception('download %s failed! \n%s', image_url, e)
                     continue
                 try:
-                    # 这里会阻塞 IO, 所以这个程序其实并不是一个异步的程序
-                    cdn_url = upload(image_data, comic)
+                    cdn_url = await upload(image_data, comic)
                 except Exception as e:
                     logger.exception('upload %s failed! \n%s', image_url, e)
                     continue

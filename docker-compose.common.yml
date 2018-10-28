@@ -2,7 +2,6 @@ webapp:
   image: mozillazg/comkc:latest
   environment:
     COMKC_PG_DSN: dbname=comkc user=comkc_user password=passwd host=postgres
-    COMKC_QINIU_ACCESS_KEY: key
-    COMKC_QINIU_SECRET_KEY: key
-    COMKC_QINIU_BUCKET_NAME: name
-    COMKC_QINIU_URL_FORMAT: url
+    COMKC_STORAGE_API_URL: http://
+    COMKC_STORAGE_API_TOKEN: xxx
+    COMKC_STORAGE_URL_FORMAT: https://

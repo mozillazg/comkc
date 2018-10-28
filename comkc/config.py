@@ -5,12 +5,9 @@ import os
 PG_DSN = os.environ['COMKC_PG_DSN']
 DEBUG = (os.getenv('COMKC_DEBUG') == 'true')
 
-QINIU = {
-    'access_key': os.getenv('COMKC_QINIU_ACCESS_KEY'),
-    'secret_key': os.getenv('COMKC_QINIU_SECRET_KEY'),
-    'bucket_name': os.getenv('COMKC_QINIU_BUCKET_NAME'),
-    'url_format': os.getenv('COMKC_QINIU_URL_FORMAT'),
-}
+STORAGE_API_URL = os.getenv('COMKC_STORAGE_API_URL')
+STORAGE_API_TOKEN = os.getenv('COMKC_STORAGE_API_TOKEN')
+STORAGE_URL_FORMAT = os.getenv('COMKC_STORAGE_URL_FORMAT')
 
 WORKER_SLEEP = int(os.getenv('COMKC_WORKER_SLEEP', 60 * 60 * 8))
 MAX_LIMIT = 20
