@@ -4,6 +4,6 @@ attrs==17.4.0
 cchardet==2.1.1
 peony-twitter==1.1.0
 pyquery==1.4.0
-raven==6.7.0
+raven==6.10.0
 SQLAlchemy==1.2.7
 xmltodict==0.11.0
