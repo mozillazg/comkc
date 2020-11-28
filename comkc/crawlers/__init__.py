@@ -118,7 +118,6 @@ class BaseWorker(metaclass=WorkerMeta):
                             'pubDate': date,
                         })
                     except Exception as e:
-                        logger.exception(e)
                         # 2019-10-02T05:43:56Z
                         date = datetime.datetime.strptime(
                                 date_str, '%Y-%m-%dT%H:%M:%SZ')
