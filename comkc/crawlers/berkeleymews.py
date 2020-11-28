@@ -10,8 +10,9 @@ logger = logging.getLogger(__name__)
 
 class Worker(BaseWorker):
     SITE = 'Berkeley Mews'
-    BASE_URL = 'http://www.berkeleymews.com/?feed=rss2'
-    ENABLE = False
+    # BASE_URL = 'http://www.berkeleymews.com/?feed=rss2'
+    BASE_URL = 'http://www.berkeleymews.com/feed/'
+    ENABLE = True
 
     async def get_items(self):
         html = await self.fetch_url(self.BASE_URL)
@@ -30,6 +31,7 @@ class Worker(BaseWorker):
         html = await self.fetch_url(url)
         image = pq(html)('#comic img').attr('src')
         return {'image': image}
+
 
 if __name__ == '__main__':
     import asyncio

@@ -5,7 +5,7 @@ from comkc.crawlers._twitter_crawler import TwitterWorker
 class Worker(TwitterWorker):
     SITE = 'Guy Kopsombut | Twitter'
     BASE_URL = 'https://twitter.com/4AMShower'
-    ENABLE = False
+    ENABLE = True
     SCREEN_NAME = '4AMShower'
 
 
