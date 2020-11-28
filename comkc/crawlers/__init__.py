@@ -60,7 +60,7 @@ class BaseWorker(metaclass=WorkerMeta):
                         await self.save_item(self.SITE, url, item)
                         await asyncio.sleep(60 * 1)
                     except Exception as e:
-                        logger.exception('%s %s %s', e, self.BASE_URL, items)
+                        logger.exception('%s %s %s', e, self.BASE_URL, item)
                         await asyncio.sleep(60 * 2)
             except Exception as e:
                 logger.exception(e)

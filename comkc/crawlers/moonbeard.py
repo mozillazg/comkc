@@ -21,7 +21,7 @@ class Worker(BaseWorker):
             title = item['title']
             item.update({
                 'title': '{0}: {1}'.format(self.SITE, title),
-                'url': item['link'],
+                'url': item['id'],
                 'date': item['published'],
             })
         return data
