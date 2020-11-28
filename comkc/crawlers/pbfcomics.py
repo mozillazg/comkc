@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class Worker(BaseWorker):
-    SITE = 'he Perry Bible Fellowship'
+    SITE = 'The Perry Bible Fellowship'
     BASE_URL = 'https://pbfcomics.com/feed/'
     ENABLE = True
 
