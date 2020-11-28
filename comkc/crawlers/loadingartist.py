@@ -28,7 +28,7 @@ class Worker(BaseWorker):
 
     async def parse_item(self, url):
         html = await self.fetch_url(url)
-        image = pq(html)('#main .comic img').attr('src')
+        image = pq(html)('.col .comic > img').attr('src')
         return {'image': image}
 
 
