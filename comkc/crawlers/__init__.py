@@ -60,7 +60,7 @@ class BaseWorker(metaclass=WorkerMeta):
                         await self.save_item(self.SITE, url, item)
                         await asyncio.sleep(60 * 1)
                     except Exception as e:
-                        logger.exception(e)
+                        logger.exception('%s %s %s', e, self.BASE_URL, items)
                         await asyncio.sleep(60 * 2)
             except Exception as e:
                 logger.exception(e)
@@ -111,14 +111,22 @@ class BaseWorker(metaclass=WorkerMeta):
 
             if date_str:
                 try:
-                    date = datetime.datetime.strptime(
-                            date_str, '%a, %d %b %Y %H:%M:%S %z')
+                    try:
+                        date = datetime.datetime.strptime(
+                                date_str, '%a, %d %b %Y %H:%M:%S %z')
+                        item.update({
+                            'pubDate': date,
+                        })
+                    except Exception as e:
+                        logger.exception(e)
+                        # 2019-10-02T05:43:56Z
+                        date = datetime.datetime.strptime(
+                                date_str, '%Y-%m-%dT%H:%M:%SZ')
+                        item.update({
+                            'pubDate': date,
+                        })
                 except Exception as e:
-                    logger.exception(e)
-                else:
-                    item.update({
-                        'pubDate': date,
-                    })
+                    logger.exception('%s %s', e, item)
             data.append(item)
         return data
 
