@@ -38,6 +38,8 @@ async def upload_images():
             )
             for comic in comics:
                 image_url = comic['image']
+                if image_url.startswith('http://https://'):
+                    image_url = image_url[len('http://'):]
                 try:
                     image_data = await fetch_url(image_url, binary=True)
                     assert image_data
