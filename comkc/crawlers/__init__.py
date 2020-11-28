@@ -94,16 +94,31 @@ class BaseWorker(metaclass=WorkerMeta):
 
     @staticmethod
     async def parse_rss_items(html):
-        rss_items = xmltodict.parse(html)['rss']['channel']['item']
+        xmldict = xmltodict.parse(html)
+        if 'rss' in xmldict:
+            rss_items = xmldict['rss']['channel']['item']
+        elif 'feed' in xmldict:
+            rss_items = xmldict['feed']['entry']
+
         data = []
 
         for item in rss_items:
-            date_str = item['pubDate']
-            date = datetime.datetime.strptime(date_str,
-                                              '%a, %d %b %Y %H:%M:%S %z')
-            item.update({
-                'pubDate': date,
-            })
+            date_str = ''
+            if 'pubDate' in item:
+                date_str = item['pubDate']
+            if 'updated' in item:
+                date_str = item['updated']
+
+            if date_str:
+                try:
+                    date = datetime.datetime.strptime(
+                            date_str, '%a, %d %b %Y %H:%M:%S %z')
+                except Exception as e:
+                    logger.exception(e)
+                else:
+                    item.update({
+                        'pubDate': date,
+                    })
             data.append(item)
         return data
 
