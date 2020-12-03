@@ -45,6 +45,8 @@ class BaseWorker(metaclass=WorkerMeta):
             try:
                 logger.info('start fetch {}'.format(self.BASE_URL))
                 items = await self.get_items()
+                logger.info('got {} items for {}'.format(
+                    len(items), self.BASE_URL))
                 for item in items[::-1]:
                     try:
                         url = item['url']
@@ -55,6 +57,9 @@ class BaseWorker(metaclass=WorkerMeta):
                         logger.info('fetching {}'.format(url))
                         extra_data = await self.parse_item(url)
                         if extra_data is None:
+                            logger.info(
+                                'not found extra_data for {}, skip'.format(url)
+                            )
                             continue
                         item.update(extra_data)
                         await self.save_item(self.SITE, url, item)
@@ -131,6 +136,7 @@ class BaseWorker(metaclass=WorkerMeta):
 
     @staticmethod
     async def save_item(site, url, item):
+        logger.info('start save {}'.format(url))
         db_data = {
             'site': site,
             'title': item['title'],
