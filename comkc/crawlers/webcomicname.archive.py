@@ -13,13 +13,14 @@ logger = logging.getLogger(__name__)
 
 class Worker(BaseWorker):
     SITE = 'webcomic name'
-    SITE_URL = 'https://webcomicname.com/'
-    BASE_URL = 'https://webcomicname.com/page/1'
+    SITE_URL = 'https://webcomicname.com'
+    # BASE_URL = 'https://webcomicname.com/page/1'
+    BASE_URL = 'https://webcomicname.com'
     PAGE_URL = 'https://webcomicname.com/page/{page}'
 
     async def get_items(self):
-        html = await self.fetch_url(self.BASE_URL)
-        pages = self._get_page_urls(html)
+        # html = await self.fetch_url(self.BASE_URL)
+        pages = self._get_page_urls('')
         data = []
         for url in pages:
             html = await self.fetch_url(url)
