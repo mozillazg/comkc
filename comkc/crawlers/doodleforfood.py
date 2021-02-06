@@ -15,6 +15,7 @@ re_img = re.compile(r'<\s*img \s*src="([^"]+)"\s*/>')
 class Worker(BaseWorker):
     SITE = 'Doodle for Food'
     BASE_URL = 'http://www.doodleforfood.com/rss'
+    ENABLE = False
 
     async def get_items(self):
         html = await self.fetch_url(self.BASE_URL)
