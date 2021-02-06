@@ -44,7 +44,9 @@ class Worker(BaseWorker):
             url = item('section.panel .date-note-wrapper a.post-date').attr('href')  # noqa
             title = url
             image = item('section.post .photo-wrapper img').attr('src')
+            image = image or item('section.post .tmblr-full img').attr('src')
             date = item('section.panel .date-note-wrapper a.post-date').text()
+            date = date or item('section.panel .date-notes a.post-date').text()
             date = date.strip()
             date = ' '.join(re.findall(r'(\S+) (\d+)[a-z]+, (\d+)', date)[0])
 
