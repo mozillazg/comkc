@@ -39,6 +39,7 @@ class Worker(BaseWorker):
     def _parse_page(self, html):
         items = pq(html)('.container .main article')
         for item in items:
+            item = pq(item)
             url = item('section.panel .date-note-wrapper a.post-date').attr('href')  # noqa
             title = url
             image = item('section.post .photo-wrapper img').attr('src')
