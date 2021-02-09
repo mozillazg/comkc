@@ -35,7 +35,7 @@ async def upload_images():
         async with engine.acquire() as conn:
             comics = await models.list_comics(
                 conn, (models.table_comic.c.cdn == ''),
-                limit=1000
+                limit=10000
             )
             for comic in comics:
                 image = comic['image']
@@ -45,6 +45,10 @@ async def upload_images():
                 for image_url in images:
                     if image_url.startswith('http://https://'):
                         image_url = image_url[len('http://'):]
+                    if '://' not in image_url:
+                        logger.info('find an invalid image(%s) from %r',
+                                    image_url, comic)
+                        continue
                     try:
                         image_data = await fetch_url(image_url, binary=True)
                         assert image_data
@@ -64,7 +68,8 @@ async def upload_images():
                 try:
                     cdn_url = await upload(image_data, comic)
                 except Exception as e:
-                    logger.exception('upload %s failed! \n%s', image, e)
+                    logger.exception('upload %s failed! (%r) \n%s',
+                                     image, comic, e)
                     continue
 
                 uuid = str(comic['uuid'])
@@ -91,6 +96,10 @@ def merge_images(image_list):
     dst_data = io.BytesIO()
     dst.save(dst_data, format='jpeg')
     return dst_data.getvalue()
+
+
+def fix_image_url(comic, image_url):
+    pass
 
 
 async def main(loop):

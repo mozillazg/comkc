@@ -56,6 +56,7 @@ class BaseWorker(metaclass=WorkerMeta):
 
                         logger.info('fetching {}'.format(url))
                         extra_data = await self.parse_item(url)
+                        logger.info('fetch {} got {}'.format(url, extra_data))
                         if extra_data is None:
                             logger.info(
                                 'not found extra_data for {}, skip'.format(url)

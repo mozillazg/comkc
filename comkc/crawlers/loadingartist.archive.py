@@ -23,7 +23,7 @@ class Worker(BaseWorker):
             url = item('a').attr('href')
             data.append({
                 'title': '{0}: {1}'.format(self.SITE, title),
-                'url': url,
+                'url': url + '?new',
             })
         return data
 
