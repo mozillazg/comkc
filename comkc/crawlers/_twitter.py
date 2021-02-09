@@ -32,7 +32,7 @@ class Twitter:
         for tweet in tweets:
             medias = []
             for media in self.parse_medias_from_tweet(tweet):
-                media.append(media)
+                medias.append(media)
             yield medias
 
     def parse_medias_from_tweet(self, tweet):

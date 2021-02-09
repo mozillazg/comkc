@@ -23,15 +23,15 @@ class TwitterWorker(BaseWorker):
         )
         data = []
 
-        for media in medias:
-            if isinstance(media, list):
-                media = media[0]
-                if len(media) == 1:
+        for media_list in medias:
+            if isinstance(media_list, list):
+                media = media_list[0]
+                if len(media_list) == 1:
                     image = media.media_url
                 else:
-                    image = [x.media_url for x in media]
+                    image = [x.media_url for x in media_list]
             else:
-                image = media.media_url
+                image = media_list.media_url
 
             data.append({
                 'title': '{0}: {1}'.format(self.SITE, media.text),
