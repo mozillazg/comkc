@@ -136,12 +136,16 @@ class BaseWorker(metaclass=WorkerMeta):
 
     @staticmethod
     async def save_item(site, url, item):
-        logger.info('start save {}'.format(url))
+        logger.info('start save {} {}'.format(url, item['image']))
+        if isinstance(item['image'], list):
+            image = ' '.join(item['image'])
+        else:
+            image = item['image']
         db_data = {
             'site': site,
             'title': item['title'],
             'source': url,
-            'image': item['image'],
+            'image': image,
             'posted_at': item['date'],
         }
         logger.debug('got item:\n{}'.format(dict(db_data)))

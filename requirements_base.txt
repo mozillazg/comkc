@@ -3,6 +3,7 @@ aiopg==0.13.2
 attrs==17.4.0
 cchardet==2.1.1
 peony-twitter==1.1.0
+Pillow==8.1.0
 pyquery==1.4.0
 raven==6.7.0
 SQLAlchemy==1.2.7

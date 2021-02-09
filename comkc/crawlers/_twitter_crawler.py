@@ -24,10 +24,19 @@ class TwitterWorker(BaseWorker):
         data = []
 
         for media in medias:
+            if isinstance(media, list):
+                media = media[0]
+                if len(media) == 1:
+                    image = media.media_url
+                else:
+                    image = [x.media_url for x in media]
+            else:
+                image = media.media_url
+
             data.append({
                 'title': '{0}: {1}'.format(self.SITE, media.text),
                 'url': media.origin_url,
-                'image': media.media_url,
+                'image': image,
                 'date': media.created_at,
             })
         return data

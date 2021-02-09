@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 
 const Comic = (props) => {
   const { comic, className } = props;
+  const img = comic.cdn === '' ? comic.image : comic.cdn
+  const images = img.split(' ')
   return (
     <div className={className}>
       <a href={comic.source}>
-        <img
+        {images.map(x => (<img
           className="img-responsive"
-          src={comic.cdn === '' ? comic.image : comic.cdn}
+          src={x}
           alt={comic.title} title={comic.title}
-        />
+        />))}
       </a>
     </div>
   );

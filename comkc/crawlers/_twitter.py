@@ -30,8 +30,10 @@ class Twitter:
 
     def parse_medias_from_tweets(self, tweets):
         for tweet in tweets:
+            medias = []
             for media in self.parse_medias_from_tweet(tweet):
-                yield media
+                media.append(media)
+            yield medias
 
     def parse_medias_from_tweet(self, tweet):
         media_sizes = ('large', 'medium', 'small', 'thumb')
@@ -40,7 +42,11 @@ class Twitter:
         created_at = datetime.datetime.strptime(
             created_at_s, '%a %b %d %H:%M:%S %z %Y'
         )
+        extended_entities = tweet.get('extended_entities', {}).get('media', [])
         entities = tweet['entities'].get('media', [])
+        if len(extended_entities) > 0:
+            entities = extended_entities
+
         for entity in entities:
             sizes = entity['sizes']
             size = sorted(sizes.keys(), key=lambda x: media_sizes.index(x))[0]

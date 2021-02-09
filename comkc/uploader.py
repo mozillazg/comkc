@@ -5,6 +5,7 @@ import io
 
 from aiopg.sa import create_engine
 import aiohttp
+from PIL import Image
 
 from comkc import config, models
 from comkc.utils import fetch_url
@@ -37,19 +38,33 @@ async def upload_images():
                 limit=1000
             )
             for comic in comics:
-                image_url = comic['image']
-                if image_url.startswith('http://https://'):
-                    image_url = image_url[len('http://'):]
-                try:
-                    image_data = await fetch_url(image_url, binary=True)
-                    assert image_data
-                except Exception as e:
-                    logger.exception('download %s failed! \n%s', image_url, e)
+                image = comic['image']
+                images = image.split(' ')
+                data_list = []
+
+                for image_url in images:
+                    if image_url.startswith('http://https://'):
+                        image_url = image_url[len('http://'):]
+                    try:
+                        image_data = await fetch_url(image_url, binary=True)
+                        assert image_data
+                        data_list.append(image_data)
+                    except Exception as e:
+                        logger.exception(
+                                'download %s failed! \n%s', image_url, e)
+                        continue
+
+                if not data_list:
                     continue
+                elif len(data_list) == 1:
+                    image_data = data_list[0]
+                else:
+                    image_data = merge_images(data_list)
+
                 try:
                     cdn_url = await upload(image_data, comic)
                 except Exception as e:
-                    logger.exception('upload %s failed! \n%s', image_url, e)
+                    logger.exception('upload %s failed! \n%s', image, e)
                     continue
 
                 uuid = str(comic['uuid'])
@@ -57,8 +72,25 @@ async def upload_images():
                     conn, (models.table_comic.c.uuid == uuid), cdn=cdn_url
                 )
                 logger.info('download %s then upload to %s success!',
-                            image_url, cdn_url)
+                            image, cdn_url)
                 await asyncio.sleep(60 * 1)
+
+
+def merge_images(image_list):
+    middle_height = 20
+    images = [Image.open(io.BytesIO(x)) for x in image_list]
+    width = max(x.width for x in images)
+    height = sum(x.height for x in images) + (len(images) + 1) * middle_height
+    dst = Image.new('RGB', (width, height), 'white')
+
+    h = middle_height
+    for im in images:
+        dst.paste(im, (0, h))
+        h = h + im.height + middle_height - 2
+
+    dst_data = io.BytesIO()
+    dst.save(dst_data, format='jpeg')
+    return dst_data.getvalue()
 
 
 async def main(loop):
