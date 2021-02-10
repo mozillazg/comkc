@@ -34,7 +34,8 @@ async def upload_images():
     async with create_engine(dsn) as engine:
         async with engine.acquire() as conn:
             comics = await models.list_comics(
-                conn, (models.table_comic.c.cdn == ''),
+                # conn, (models.table_comic.c.cdn == ''),
+                conn, (models.table_comic.c.site == 'webcomic name'),
                 limit=10000
             )
             for comic in comics:
@@ -51,6 +52,10 @@ async def upload_images():
                         continue
                     try:
                         image_data = await fetch_url(image_url, binary=True)
+                        if b'<html' in image_data:
+                            image_data = await fetch_url(
+                                image_url, binary=True,
+                                referer=comic['source'])
                         assert image_data
                         data_list.append(image_data)
                     except Exception as e:
