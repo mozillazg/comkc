@@ -34,8 +34,8 @@ async def upload_images():
     async with create_engine(dsn) as engine:
         async with engine.acquire() as conn:
             comics = await models.list_comics(
-                # conn, (models.table_comic.c.cdn == ''),
-                conn, (models.table_comic.c.site == 'webcomic name'),
+                conn, (models.table_comic.c.cdn == ''),
+                # conn, (models.table_comic.c.site == 'webcomic name'),
                 limit=10000
             )
             for comic in comics:

@@ -13,6 +13,7 @@ class Worker(BaseWorker):
     SITE = 'webcomic name'
     SITE_URL = 'https://webcomicname.com'
     BASE_URL = 'https://webcomicname.com/rss'
+    ENABLE = False
 
     async def get_items(self):
         html = await self.fetch_url(self.BASE_URL)
