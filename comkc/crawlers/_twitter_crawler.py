@@ -25,6 +25,8 @@ class TwitterWorker(BaseWorker):
 
         for media_list in medias:
             if isinstance(media_list, list):
+                if len(media_list) == 0:
+                    continue
                 media = media_list[0]
                 if len(media_list) == 1:
                     image = media.media_url
