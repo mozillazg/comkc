@@ -3,7 +3,7 @@ body {
 }
 
 .portfolio-item {
-  max-height: 263px;
+  /* max-height: 263px */;
   min-height: 263px;
   overflow: hidden;
   margin-bottom: 25px;
