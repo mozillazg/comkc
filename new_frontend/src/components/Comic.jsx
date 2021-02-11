@@ -11,7 +11,7 @@ const Comic = (props) => {
         {images.map(x => (<img
           className="img-responsive"
           src={x}
-          onError={e => e.target.src = comic.image}
+          onError={e => e.target.src !== comic.image ? e.target.src = comic.image : null}
           alt={comic.title} title={comic.title}
         />))}
       </a>
