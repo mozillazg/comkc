@@ -47,8 +47,8 @@ async def upload_images():
                     if image_url.startswith('http://https://'):
                         image_url = image_url[len('http://'):]
                     if '://' not in image_url:
-                        logger.error('find an invalid image(%s) from %r',
-                                     image_url, comic)
+                        logger.info('find an invalid image(%s) from %r',
+                                    image_url, comic)
                         continue
                     try:
                         image_data = await fetch_url(image_url, binary=True)
