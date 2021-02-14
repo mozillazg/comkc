@@ -36,7 +36,7 @@ async def upload_images():
             comics = await models.list_comics(
                 conn, (models.table_comic.c.cdn == ''),
                 # conn, (models.table_comic.c.site == 'webcomic name'),
-                limit=10000
+                limit=100
             )
             for comic in comics:
                 image = comic['image']
