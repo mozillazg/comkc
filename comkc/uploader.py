@@ -84,6 +84,7 @@ async def upload_images():
                 logger.info('download %s then upload to %s success!',
                             image, cdn_url)
                 await asyncio.sleep(60 * 1)
+            await asyncio.sleep(60 * 60 * 12)
 
 
 def merge_images(image_list):
