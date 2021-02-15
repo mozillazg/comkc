@@ -2,6 +2,7 @@
 import asyncio
 import logging
 import io
+import random
 
 from aiopg.sa import create_engine
 import aiohttp
@@ -83,8 +84,7 @@ async def upload_images():
                 )
                 logger.info('download %s then upload to %s success!',
                             image, cdn_url)
-                await asyncio.sleep(60 * 1)
-            await asyncio.sleep(60 * 60 * 12)
+                await asyncio.sleep(60 * 1 * (random.random() + 1))
 
 
 def merge_images(image_list):
@@ -111,7 +111,7 @@ def fix_image_url(comic, image_url):
 async def main(loop):
     while True:
         await upload_images()
-        await asyncio.sleep(config.WORKER_SLEEP / 3)
+        await asyncio.sleep((config.WORKER_SLEEP / 3) * (random.random() + 1))
 
 
 if __name__ == '__main__':

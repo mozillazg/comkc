@@ -3,6 +3,7 @@ import abc
 import asyncio
 import datetime
 import logging
+import random
 
 from aiopg.sa import create_engine
 import xmltodict
@@ -64,15 +65,15 @@ class BaseWorker(metaclass=WorkerMeta):
                             continue
                         item.update(extra_data)
                         await self.save_item(self.SITE, url, item)
-                        await asyncio.sleep(60 * 1)
+                        await asyncio.sleep(60 * 1 * (random.random() + 1))
                     except Exception as e:
                         logger.exception('%s %s %s', e, self.BASE_URL, item)
-                        await asyncio.sleep(60 * 2)
+                        await asyncio.sleep(60 * 2 * (random.random() + 1))
             except Exception as e:
                 logger.exception(e)
-                await asyncio.sleep(60 * 2)
+                await asyncio.sleep(60 * 2 * (random.random() + 1))
             else:
-                await asyncio.sleep(self.SLEEP)
+                await asyncio.sleep(self.SLEEP * (random.random() + 1))
                 logger.info('sleep...')
 
     async def __call__(self):
