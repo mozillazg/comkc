@@ -107,6 +107,9 @@ class BaseWorker(metaclass=WorkerMeta):
         elif 'feed' in xmldict:
             rss_items = xmldict['feed']['entry']
 
+        if isinstance(rss_items, dict):
+            rss_items = [rss_items]
+
         data = []
 
         for item in rss_items:
