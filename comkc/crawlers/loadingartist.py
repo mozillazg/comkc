@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class Worker(BaseWorker):
     SITE = 'Loading Artist'
-    BASE_URL = 'https://loadingartist.com/feed'
+    BASE_URL = 'https://loadingartist.com/index.xml'
     ENABLE = True
 
     async def get_items(self):
