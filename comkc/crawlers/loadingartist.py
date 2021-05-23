@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class Worker(BaseWorker):
     SITE = 'Loading Artist'
     BASE_URL = 'https://loadingartist.com/index.xml'
+    IMAGE_URL = "https://loadingartist.com"
     ENABLE = True
 
     async def get_items(self):
@@ -29,6 +30,8 @@ class Worker(BaseWorker):
     async def parse_item(self, url):
         html = await self.fetch_url(url)
         image = pq(html)('.main-image-container picture img').attr('src') or ''
+        if not image.startswith('http'):
+            image = '{}{}'.format(self.IMAGE_URL, image)
         return {'image': image}
 
 
