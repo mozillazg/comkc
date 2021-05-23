@@ -30,7 +30,7 @@ class Worker(BaseWorker):
     async def parse_item(self, url):
         html = await self.fetch_url(url)
         image = pq(html)('.main-image-container picture img').attr('src') or ''
-        if not image.startswith('http'):
+        if image and not image.startswith('http'):
             image = '{}{}'.format(self.IMAGE_URL, image)
         return {'image': image}
 
