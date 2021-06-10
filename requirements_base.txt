@@ -5,5 +5,5 @@ cchardet==2.1.1
 peony-twitter==1.1.0
 pyquery==1.4.0
 raven==6.7.0
-SQLAlchemy==1.4.5
+SQLAlchemy==1.4.18
 xmltodict==0.11.0
