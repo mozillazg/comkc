@@ -4,9 +4,9 @@ from comkc.crawlers._twitter_crawler import TwitterWorker
 
 class Worker(TwitterWorker):
     SITE = 'dinosaur | Twitter'
-    BASE_URL = 'https://twitter.com/dinoman_j'
-    ENABLE = False
-    SCREEN_NAME = 'dinoman_j'
+    BASE_URL = 'https://twitter.com/dino_comics'
+    ENABLE = True
+    SCREEN_NAME = 'dino_comics'
 
 
 if __name__ == '__main__':
