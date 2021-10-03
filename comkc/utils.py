@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import aiohttp
 import logging
+import ssl
 
 logger = logging.getLogger(__name__)
 CLIENT_HEADERS = {
@@ -20,12 +21,13 @@ async def fetch_url(url, binary=False, return_resp=False, method='GET',
     headers.update(CLIENT_HEADERS)
 
     async with aiohttp.ClientSession(headers=CLIENT_HEADERS) as session:
+        ssl_context = ssl.SSLContext()
         if referer:
-            async with getattr(session, method.lower())(referer) as resp:
+            async with getattr(session, method.lower())(referer, ssl=ssl_context) as resp:
                 await resp.read()
 
         logger.info('start fetch %s', url)
-        async with getattr(session, method.lower())(url) as resp:
+        async with getattr(session, method.lower())(url, ssl=ssl_context) as resp:
             resp.raise_for_status()
             if return_resp:
                 return resp
