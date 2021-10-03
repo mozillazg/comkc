@@ -60,7 +60,8 @@ async def upload_images():
                         assert image_data
                         data_list.append(image_data)
                     except Exception as e:
-                        if 'Not Found' in '{}'.format(e):
+                        msg = '{}'.format(e)
+                        if 'Not Found' in msg or 'Forbidden' in msg:
                             logger.info('download %s failed! \n%s', image_url, e)
                             continue
                         logger.exception(
