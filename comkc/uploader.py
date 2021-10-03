@@ -60,8 +60,7 @@ async def upload_images():
                         assert image_data
                         data_list.append(image_data)
                     except Exception as e:
-                        logger.exception(
-                                'download %s failed! \n%s', image_url, e)
+                        logger.info('download %s failed! \n%s', image_url, e)
                         continue
 
                 if not data_list:
