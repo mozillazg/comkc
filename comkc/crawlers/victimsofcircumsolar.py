@@ -21,7 +21,7 @@ class Worker(BaseWorker):
             title = item['title']
             item.update({
                 'title': '{0}: {1}'.format(self.SITE, title),
-                'url': item['feedburner:origLink'],
+                'url': item['link'],
                 'date': item['pubDate'],
             })
         return data
