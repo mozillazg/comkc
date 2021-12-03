@@ -68,10 +68,14 @@ class BaseWorker(metaclass=WorkerMeta):
                         await asyncio.sleep(60 * 1 * (random.random() + 1))
                     except Exception as e:
                         logger.exception('%s %s %s', e, self.BASE_URL, item)
-                        await asyncio.sleep(60 * 2 * (random.random() + 1))
+                        await asyncio.sleep(60 * 5 * (random.random() + 1))
             except Exception as e:
-                logger.exception(e)
-                await asyncio.sleep(60 * 2 * (random.random() + 1))
+                if 'DoesNotExist' in str(e):
+                    logger.info(e)
+                    await asyncio.sleep(60 * 20 * (random.random() + 1))
+                else:
+                    logger.exception(e)
+                    await asyncio.sleep(60 * 10 * (random.random() + 1))
             else:
                 await asyncio.sleep(self.SLEEP * (random.random() + 1))
                 logger.info('sleep...')
