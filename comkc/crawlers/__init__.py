@@ -70,7 +70,8 @@ class BaseWorker(metaclass=WorkerMeta):
                         logger.exception('%s %s %s', e, self.BASE_URL, item)
                         await asyncio.sleep(60 * 5 * (random.random() + 1))
             except Exception as e:
-                if 'DoesNotExist' in str(e):
+                if 'DoesNotExist' in str(e) or \
+                        'page does not exist' in '{}'.format(e):
                     logger.info(e)
                     await asyncio.sleep(60 * 20 * (random.random() + 1))
                 else:
