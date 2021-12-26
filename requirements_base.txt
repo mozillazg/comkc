@@ -2,7 +2,7 @@ aiohttp==3.8.1
 aiopg==1.3.1
 attrs==21.2.0
 cchardet==2.1.1
-peony-twitter==2.0.2
+peony-twitter==2.1.1
 pyquery==1.4.0
 raven==6.7.0
 SQLAlchemy==1.4.29
