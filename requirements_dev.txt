@@ -2,7 +2,7 @@
 bumpversion==0.5.3
 coverage==6.2
 flake8==3.9.2
-pre-commit==2.14.1
+pre-commit==2.17.0
 pytest-cov==3.0.0
 pytest==3.5.1
 Sphinx==4.3.2
