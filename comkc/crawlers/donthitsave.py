@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class Worker(BaseWorker):
     SITE = 'Don\'t Hit Save'
     BASE_URL = 'http://donthitsave.com/donthitsavefeed.xml'
+    ENABLE = False
 
     async def get_items(self):
         html = await self.fetch_url(self.BASE_URL)
