@@ -6,5 +6,5 @@ pre-commit==2.17.0
 pytest-cov==3.0.0
 pytest==7.1.0
 Sphinx==5.1.1
-tox==3.24.5
+tox==4.2.6
 wheel==0.38.2
