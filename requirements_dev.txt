@@ -7,4 +7,4 @@ pytest-cov==3.0.0
 pytest==7.1.0
 Sphinx==5.1.1
 tox==3.24.5
-wheel==0.38.2
+wheel==0.42.0
