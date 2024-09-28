@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class Worker(BaseWorker):
     SITE = 'Moonbeard'
-    BASE_URL = 'https://moonbeard.com/feed/atom/'
+    BASE_URL = 'https://squires.nz/comic/feed'
     ENABLE = True
 
     async def get_items(self):
@@ -21,14 +21,14 @@ class Worker(BaseWorker):
             title = item['title']
             item.update({
                 'title': '{0}: {1}'.format(self.SITE, title),
-                'url': item['id'],
+                'url': item['link'],
                 'date': item['published'],
             })
         return data
 
     async def parse_item(self, url):
         html = await self.fetch_url(url)
-        image = pq(html)('#comic img').attr('src')
+        image = pq(html)('#unspliced-comic img').attr('src')
         return {'image': image}
 
 
