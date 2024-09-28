@@ -15,6 +15,9 @@ CLIENT_HEADERS = {
 
 async def fetch_url(url, binary=False, return_resp=False, method='GET',
                     referer=None):
+    if 'http://www.w3.org/2000/svg' in url:
+        return url
+
     headers = {}
     if referer:
         headers['Referer'] = referer
