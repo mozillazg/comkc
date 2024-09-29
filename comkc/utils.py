@@ -13,6 +13,8 @@ CLIENT_HEADERS = {
 
 
 async def fetch_url(url, binary=False, return_resp=False, method='GET'):
+    if 'http://www.w3.org/2000/svg' in url:
+        return url
     async with aiohttp.ClientSession(headers=CLIENT_HEADERS) as session:
         logger.info('start fetch %s', url)
         async with getattr(session, method.lower())(url) as resp:
