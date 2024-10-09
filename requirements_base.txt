@@ -6,4 +6,4 @@ peony-twitter==2.1.2
 pyquery==1.4.0
 raven==6.7.0
 SQLAlchemy==1.4.32
-xmltodict==0.13.0
+xmltodict==0.14.1
